@@ -22,12 +22,12 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Options options;
 
-    @OneToOne(mappedBy = "driver")
-    private Driver driver;
+//    @OneToOne(mappedBy = "driver")
+//    private Driver driver;
 
-    @ManyToOne()
-    @JoinColumn(name = "car_id")
-    private Car car;
+//    @ManyToOne()
+//    @JoinColumn(name = "car_id")
+//    private Car car;
 
 
 }
