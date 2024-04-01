@@ -1,4 +1,4 @@
-package com.example.cabproject.dto;
+package com.example.cabproject.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

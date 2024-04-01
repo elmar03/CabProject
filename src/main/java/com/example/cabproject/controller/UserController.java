@@ -1,6 +1,6 @@
 package com.example.cabproject.controller;
 
-import com.example.cabproject.dto.UserResponseDto;
+import com.example.cabproject.dto.response.UserResponseDto;
 import com.example.cabproject.service.UserService;
 import lombok.Data;
 import org.springframework.web.bind.annotation.GetMapping;
