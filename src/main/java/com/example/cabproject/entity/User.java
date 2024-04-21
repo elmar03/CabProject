@@ -1,14 +1,16 @@
 package com.example.cabproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 
 @Entity
 @Data
 @RequiredArgsConstructor
+@Table(name ="\"table\"")
 public class User {
     @Id
     private Long id;
@@ -23,7 +25,7 @@ public class User {
     private String cardDetails;
     private String language;
 
-
-
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
 }

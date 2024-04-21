@@ -17,7 +17,6 @@ public class OrderRequestDto {
    private Options options;
    private String pickupLocation;
    private String destination;
-   private OrderStatus orderStatus;
    private PaymentMethod paymentMethod;
 
 }

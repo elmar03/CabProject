@@ -13,6 +13,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Table(name = "\"order\"")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +30,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-//    @OneToOne(mappedBy = "driver")
-//    private Driver driver;
-
-//    @ManyToOne()
-//    @JoinColumn(name = "car_id")
-//    private Car car;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    User user;
 
 
 }

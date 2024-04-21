@@ -1,11 +1,11 @@
 package com.example.cabproject.controller;
 
+import com.example.cabproject.dto.request.UserRequestDto;
 import com.example.cabproject.dto.response.UserResponseDto;
 import com.example.cabproject.service.UserService;
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,14 +13,30 @@ import java.util.List;
 @RequestMapping("user")
 @Data
 public class UserController {
-    private UserService userService;
 
-    @GetMapping("/findAll")
-    public List<UserResponseDto> findUsers(){
-       return userService.getAllUsers();
+    private final UserService userService;
+
+    @GetMapping("/findUserByİd{id}")
+    public UserResponseDto findUser(@PathVariable long id){
+        return userService.findUserById(id);
     }
 
+    @PutMapping("/update{id}")
+    public UserResponseDto updateUser(@PathVariable long id, @RequestBody UserRequestDto dto){
+     return userService.updateUser(id, dto);
+    }
 
+    @DeleteMapping("/delete{id}")
+    public ResponseEntity<String> deleteAccount(@PathVariable long id){
+        userService.deleteAccount(id);
+        return ResponseEntity.ok("Account deleted");
+    }
+
+    @PostMapping("/signUp")
+    public ResponseEntity<String> signUp(@RequestBody UserRequestDto userRequestDto){
+        userService.userRegistration(userRequestDto);
+        return ResponseEntity.ok("Registration successful");
+    }
 
 
 
