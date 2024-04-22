@@ -18,15 +18,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public List<UserResponseDto> getAllUsers(){
-        List<User> all = userRepository.findAll();
-        return all.stream().map(x -> modelMapper.map(x, UserResponseDto.class)).toList();
-    }
+//    public List<UserResponseDto> getAllUsers(){
+//        List<User> all = userRepository.findAll();
+//        return all.stream().map(x -> modelMapper.map(x, UserResponseDto.class)).toList();
+//    }
 
     public void userRegistration(UserRequestDto requestDto){
         User newUser = modelMapper.map(requestDto, User.class);
         userRepository.save(newUser);
         ResponseEntity.ok("Registration successful");
+    }
+
+    public UserResponseDto findUserById(Long id){
+        return userRepository.findUserById(id);
     }
 
     //login
@@ -52,9 +56,6 @@ public class UserService {
 
     }
 
-    public UserResponseDto findUserById(Long id){
-        return userRepository.findUserById(id);
-    }
 
 
 

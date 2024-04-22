@@ -41,12 +41,13 @@ public OrderResponseDto createOrder(OrderRequestDto orderRequestDto){
     return modelMapper.map(savedOrder, OrderResponseDto.class);
 }
 
-    public void cancelOrder(Long id){
+    public ResponseEntity<String> cancelOrder(Long id){
         Optional<Order> order = orderRepository.findById(id);
         if(order.isPresent()){
             Order order1 = order.get();
             if(order1.getStatus()== OrderStatus.PENDING || order1.getStatus()==OrderStatus.ACTIVE){
-                orderRepository.deleteById(id);
+                order1.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order1);
                 ResponseEntity.ok("Order with id " + id + " has been successfully cancelled.");
             }else {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot cancel order with id"
@@ -55,7 +56,6 @@ public OrderResponseDto createOrder(OrderRequestDto orderRequestDto){
         } else {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with the id of " + id + " not found");
         }
-
     }
 
     public List<OrderResponseDto> getFinishedOrdersHistory(Long id) {
