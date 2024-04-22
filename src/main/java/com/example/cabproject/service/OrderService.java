@@ -41,7 +41,7 @@ public OrderResponseDto createOrder(OrderRequestDto orderRequestDto){
     return modelMapper.map(savedOrder, OrderResponseDto.class);
 }
 
-    public ResponseEntity<String> cancelOrder(Long id){
+    public void cancelOrder(Long id){
         Optional<Order> order = orderRepository.findById(id);
         if(order.isPresent()){
             Order order1 = order.get();
