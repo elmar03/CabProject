@@ -18,12 +18,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String pickupLocation;
-//    private Double pickupLatitude;
-//    private Double pickupLongitude;
-    private String destination;
-//    private Double destinationLatitude;
-//    private Double destinationLongitude;
+    private Double pickupLatitude;
+    private Double pickupLongitude;
+    private Double destinationLatitude;
+    private Double destinationLongitude;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

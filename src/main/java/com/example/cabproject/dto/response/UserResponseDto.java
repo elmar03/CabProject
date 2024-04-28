@@ -1,12 +1,11 @@
 package com.example.cabproject.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Builder
+@Data
+@NoArgsConstructor
 public class UserResponseDto {
     private String name;
     private String surName;

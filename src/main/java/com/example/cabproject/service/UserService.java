@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +19,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-//    public List<UserResponseDto> getAllUsers(){
-//        List<User> all = userRepository.findAll();
-//        return all.stream().map(x -> modelMapper.map(x, UserResponseDto.class)).toList();
-//    }
-
     public void userRegistration(UserRequestDto requestDto){
         User newUser = modelMapper.map(requestDto, User.class);
         userRepository.save(newUser);
@@ -30,7 +26,8 @@ public class UserService {
     }
 
     public UserResponseDto findUserById(Long id){
-        return userRepository.findUserById(id);
+        User userById = userRepository.findUserById(id);
+        return modelMapper.map(userById, UserResponseDto.class);
     }
 
     //login
@@ -41,16 +38,12 @@ public class UserService {
     }
 
     public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto){
-        User user = userRepository.findById(id).orElseThrow();
-        user.setAge(userRequestDto.getAge());
-        user.setCardDetails(userRequestDto.getCardDetails());
-        user.setGender(userRequestDto.getGender());
-        user.setName(userRequestDto.getName());
-        user.setEmailAddress(userRequestDto.getEmailAddress());
-        user.setHomeAddress(userRequestDto.getHomeAddress());
-        user.setLanguage(userRequestDto.getLanguage());
-        user.setSurName(userRequestDto.getSurName());
-        user.setPhoneNumber(user.getPhoneNumber());
+        if (userRequestDto == null) {
+            throw new IllegalArgumentException("User request cannot be null");
+        }
+        User user = userRepository.findById(id).orElseThrow(()->
+                new NoSuchElementException("User not found with id: " + id));
+        modelMapper.map(userRequestDto,user);
         User newUser = userRepository.save(user);
         return modelMapper.map(newUser, UserResponseDto.class);
 

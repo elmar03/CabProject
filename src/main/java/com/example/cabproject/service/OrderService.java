@@ -82,8 +82,8 @@ public OrderResponseDto createOrder(OrderRequestDto orderRequestDto){
         if (!validateOrder(orderRequestDto)) {
             throw new IllegalArgumentException("Invalid order request,Please try again");
         }
-        order.setDestination(orderRequestDto.getDestination());
-        order.setPickupLocation(orderRequestDto.getPickupLocation());
+        order.setDestinationLongitude(orderRequestDto.getDestinationLongitude());
+        order.setDestinationLatitude(orderRequestDto.getDestinationLatitude());
         order.setOptions(orderRequestDto.getOptions());
         order.setPaymentMethod(orderRequestDto.getPaymentMethod());
         Order save = orderRepository.save(order);
@@ -98,10 +98,20 @@ public OrderResponseDto createOrder(OrderRequestDto orderRequestDto){
         if (orderRequestDto.getOptions() == null) {
             return false;
         }
-        if (orderRequestDto.getPickupLocation() == null || orderRequestDto.getPickupLocation().isEmpty()) {
+        if (orderRequestDto.getDestinationLatitude() == null || Double.
+                toString(orderRequestDto.getDestinationLatitude()).isEmpty()) {
             return false;
         }
-        if (orderRequestDto.getDestination() == null || orderRequestDto.getDestination().isEmpty()) {
+        if (orderRequestDto.getDestinationLongitude() == null || Double.
+                toString(orderRequestDto.getDestinationLongitude()).isEmpty()) {
+            return false;
+        }
+        if (orderRequestDto.getPickupLatitude() == null || Double.
+                toString(orderRequestDto.getPickupLatitude()).isEmpty()) {
+            return false;
+        }
+        if (orderRequestDto.getPickupLongitude() == null || Double.
+                toString(orderRequestDto.getPickupLongitude()).isEmpty()) {
             return false;
         }
         if (orderRequestDto.getPaymentMethod() == null) {

@@ -15,8 +15,10 @@ public class OrderRequestDto {
 
    private String customerName;
    private Options options;
-   private String pickupLocation;
-   private String destination;
+   private Double pickupLatitude;
+   private Double pickupLongitude;
+   private Double destinationLatitude;
+   private Double destinationLongitude;
    private PaymentMethod paymentMethod;
 
 }

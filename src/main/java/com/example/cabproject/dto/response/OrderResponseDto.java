@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 public class OrderResponseDto {
     private String orderId;
     private String customerName;
-    private String pickupLocation;
-    private String destination;
+    private Double pickupLatitude;
+    private Double pickupLongitude;
+    private Double destinationLatitude;
+    private Double destinationLongitude;
     private LocalDateTime pickupTime;
     private LocalDateTime dropOffTime;
     private double distance;
