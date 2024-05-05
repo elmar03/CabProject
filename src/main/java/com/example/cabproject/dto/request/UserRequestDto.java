@@ -1,5 +1,6 @@
 package com.example.cabproject.dto.request;
 
+import com.example.cabproject.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

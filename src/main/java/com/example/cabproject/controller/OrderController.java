@@ -1,13 +1,13 @@
 package com.example.cabproject.controller;
 
+import com.example.cabproject.dto.CarDto.CarResponseDto;
 import com.example.cabproject.dto.request.OrderRequestDto;
-import com.example.cabproject.dto.request.UserRequestDto;
 import com.example.cabproject.dto.response.OrderResponseDto;
-import com.example.cabproject.dto.response.UserResponseDto;
+import com.example.cabproject.exceptions.CarNotFoundException;
 import com.example.cabproject.exceptions.OrderNotFoundException;
+import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.service.OrderService;
 import lombok.Data;
-import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,26 +20,31 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @PostMapping("/sendRequest")
+    public List<CarResponseDto> getCars(@RequestBody OrderRequestDto orderRequestDto){
+        return orderService.createOrderStep1(orderRequestDto);
+    }
+
     @PostMapping("/createOrder")
-    public OrderResponseDto createOrder(@RequestBody OrderRequestDto orderRequestDto){
-      return orderService.createOrder(orderRequestDto);
+    public String createOrder(@RequestBody OrderRequestDto orderRequestDto,
+                                        @RequestParam Long id) throws CarNotFoundException, UserNotFoundException {
+      return orderService.createOrderStep2(orderRequestDto, id);
     }
 
     @GetMapping("/completedOrders")
-    public List<OrderResponseDto> getCompletedOrders(Long id){
-
-        return orderService.getFinishedOrdersHistory(id);
+    public List<OrderResponseDto> getCompletedOrders(){
+        return orderService.getCompletedOrders();
     }
     @GetMapping("/cancelledOrders")
-    public List<OrderResponseDto> getCancelledOrders(Long id){
-        return orderService.getCancelledOrders(id);
+    public List<OrderResponseDto> getCancelledOrders(){
+        return orderService.getCancelledOrders();
     }
-    @GetMapping("/activeOrder")
-    public List<OrderResponseDto> getActiveOrder(Long id){
-        return orderService.getActiveOrder(id);
+    @GetMapping("/activeOrders")
+    public List<OrderResponseDto> getActiveOrders(){
+        return orderService.getActiveOrders();
     }
 
-    @DeleteMapping("/cancel{id}")
+    @DeleteMapping("/cancelOrder{id}")
     public ResponseEntity<String> cancelOrder(@PathVariable long id){
         orderService.cancelOrder(id);
         return ResponseEntity.ok("Order cancelled");

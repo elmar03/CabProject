@@ -1,5 +1,6 @@
 package com.example.cabproject.dto.response;
 
+import com.example.cabproject.dto.CarDto.CarResponseDto;
 import com.example.cabproject.enums.OrderStatus;
 import com.example.cabproject.enums.PaymentMethod;
 import com.example.cabproject.enums.PaymentStatus;
@@ -24,6 +25,8 @@ public class OrderResponseDto {
     private PaymentStatus paymentStatus;
     private OrderStatus orderStatus;
     private PaymentMethod paymentMethod;
+
+    private CarResponseDto carResponseDto;
 
 
 }

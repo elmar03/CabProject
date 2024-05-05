@@ -25,24 +25,24 @@ public class UserService {
         ResponseEntity.ok("Registration successful");
     }
 
-    public UserResponseDto findUserById(Long id){
-        User userById = userRepository.findUserById(id);
+    public UserResponseDto findUserById(Long userId){
+        User userById = userRepository.findByUserId(userId);
         return modelMapper.map(userById, UserResponseDto.class);
     }
 
     //login
 
-    public void deleteAccount(long id){
-        userRepository.deleteById(id);
+    public void deleteAccount(long userId){
+        userRepository.deleteById(userId);
         ResponseEntity.ok("Account deleted");
     }
 
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto){
+    public UserResponseDto updateUser(Long userId, UserRequestDto userRequestDto){
         if (userRequestDto == null) {
             throw new IllegalArgumentException("User request cannot be null");
         }
-        User user = userRepository.findById(id).orElseThrow(()->
-                new NoSuchElementException("User not found with id: " + id));
+        User user = userRepository.findById(userId).orElseThrow(()->
+                new NoSuchElementException("User not found with id: " + userId));
         modelMapper.map(userRequestDto,user);
         User newUser = userRepository.save(user);
         return modelMapper.map(newUser, UserResponseDto.class);

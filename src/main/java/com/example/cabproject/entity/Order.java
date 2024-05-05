@@ -17,11 +17,23 @@ import lombok.Setter;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long orderId;
     private Double pickupLatitude;
     private Double pickupLongitude;
     private Double destinationLatitude;
     private Double destinationLongitude;
+
+    private Long carId;
+    private String brand;
+    private String model;
+    private String colour;
+    private Integer number;
+    private  Integer year;
+    private String size;
+    private Double carLat;
+    private Double carLong;
+    //private Long userId;
+
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
