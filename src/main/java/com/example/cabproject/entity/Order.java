@@ -32,7 +32,8 @@ public class Order {
     private String size;
     private Double carLat;
     private Double carLong;
-    //private Long userId;
+    
+    private Integer UserReview;
 
 
     @Enumerated(EnumType.STRING)

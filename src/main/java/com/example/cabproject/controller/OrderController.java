@@ -3,10 +3,12 @@ package com.example.cabproject.controller;
 import com.example.cabproject.dto.CarDto.CarResponseDto;
 import com.example.cabproject.dto.request.OrderRequestDto;
 import com.example.cabproject.dto.response.OrderResponseDto;
+import com.example.cabproject.entity.Order;
 import com.example.cabproject.exceptions.CarNotFoundException;
 import com.example.cabproject.exceptions.OrderNotFoundException;
 import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +28,9 @@ public class OrderController {
     }
 
     @PostMapping("/createOrder")
-    public String createOrder(@RequestBody OrderRequestDto orderRequestDto,
+    public String createOrder(
                                         @RequestParam Long id) throws CarNotFoundException, UserNotFoundException {
-      return orderService.createOrderStep2(orderRequestDto, id);
+      return orderService.createOrderStep2( id);
     }
 
     @GetMapping("/completedOrders")
@@ -44,7 +46,7 @@ public class OrderController {
         return orderService.getActiveOrders();
     }
 
-    @DeleteMapping("/cancelOrder{id}")
+    @PutMapping("/cancelOrder{id}")
     public ResponseEntity<String> cancelOrder(@PathVariable long id){
         orderService.cancelOrder(id);
         return ResponseEntity.ok("Order cancelled");
@@ -54,6 +56,11 @@ public class OrderController {
     public OrderResponseDto updateOrder(Long id,@RequestBody OrderRequestDto orderRequestDto)
             throws OrderNotFoundException {
        return orderService.updateOrder(id,orderRequestDto);
+    }
+
+    @PostMapping("/sendOrder")
+    public Order sendOrder(Order order){
+        return orderService.sendOrder(order);
     }
 
 

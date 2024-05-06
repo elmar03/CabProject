@@ -18,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final OrderService orderService;
 
     public void userRegistration(UserRequestDto requestDto){
         User newUser = modelMapper.map(requestDto, User.class);
@@ -29,8 +30,6 @@ public class UserService {
         User userById = userRepository.findByUserId(userId);
         return modelMapper.map(userById, UserResponseDto.class);
     }
-
-    //login
 
     public void deleteAccount(long userId){
         userRepository.deleteById(userId);
@@ -48,6 +47,8 @@ public class UserService {
         return modelMapper.map(newUser, UserResponseDto.class);
 
     }
+
+
 
 
 

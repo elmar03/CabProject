@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,41 +35,48 @@ public class OrderService {
     private final DriverApi driverApi;
 
 
+    OrderRequestDto currentOrderRequestDto;
+
     public List<CarResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
+        currentOrderRequestDto = orderRequestDto;
+
         return driverApi.getAvailableCars();
     }
 
-
-    public String createOrderStep2 (OrderRequestDto orderRequestDto, Long id) throws CarNotFoundException, UserNotFoundException {
-    List<CarResponseDto> orderStep1 = createOrderStep1(orderRequestDto);
-    List<CarResponseDto> list = orderStep1.stream().filter(x -> Objects.equals(x.getCarId(), id)).toList();
-    CarResponseDto carResponseDto;
-    if (list == null) {
-        throw new CarNotFoundException("Car not found");
-    } else {
-        carResponseDto = list.get(0);
-    }
-    Order order = modelMapper.map(orderRequestDto, Order.class);
-        Optional<User> optionalUser = userRepository.findById(orderRequestDto.getUserId());
+    public String createOrderStep2(Long id) throws CarNotFoundException, UserNotFoundException {
+        List<CarResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
+        List<CarResponseDto> list = orderStep1.stream().filter(x -> Objects.equals(x.getCarId(), id)).toList();
+        CarResponseDto carResponseDto;
+        if (list == null) {
+            throw new CarNotFoundException("Car not found");
+        } else {
+            carResponseDto = list.get(0);
+        }
+        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
+        Optional<User> optionalUser = userRepository.findById(currentOrderRequestDto.getUserId());
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User not found"));
         order.setUser(user);
         modelMapper.map(carResponseDto, order);
-    order.setPaymentStatus(PaymentStatus.PENDING);
-    order.setStatus(OrderStatus.ACTIVE);
-    orderRepository.save(order);
-    return "Successfully";
-}
+        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setStatus(OrderStatus.ACTIVE);
+        orderRepository.save(order);
+        sendOrder(order);
+        return "Successfully";
+    }
 
+    public Order sendOrder(Order order) {
+        return order;
+    }
 
-    public void cancelOrder(Long id){
+    public void cancelOrder(Long id) {
         Optional<Order> order = orderRepository.findById(id);
-        if(order.isPresent()){
+        if (order.isPresent()) {
             Order order1 = order.get();
-            if(order1.getStatus()== OrderStatus.PENDING || order1.getStatus()==OrderStatus.ACTIVE){
+            if (order1.getStatus() == OrderStatus.PENDING || order1.getStatus() == OrderStatus.ACTIVE) {
                 order1.setStatus(OrderStatus.CANCELLED);
                 orderRepository.save(order1);
                 ResponseEntity.ok("Order with id " + id + " has been successfully cancelled.");
-            }else {
+            } else {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot cancel order with id"
                         + id + "because it's already in progress or completed");
             }
@@ -77,12 +85,10 @@ public class OrderService {
         }
     }
 
-
     public List<OrderResponseDto> getCompletedOrders() {
         List<Order> finishedOrders = orderRepository.findOrdersByStatus(OrderStatus.COMPLETED);
         return finishedOrders.stream().map(x -> modelMapper.map(x, OrderResponseDto.class)).toList();
     }
-
 
     public List<OrderResponseDto> getActiveOrders() {
         List<Order> activeOrder = orderRepository.findOrdersByStatus(OrderStatus.ACTIVE);
@@ -94,9 +100,9 @@ public class OrderService {
         return cancelledOrders.stream().map(x -> modelMapper.map(x, OrderResponseDto.class)).toList();
     }
 
-    public OrderResponseDto updateOrder (Long id,OrderRequestDto orderRequestDto) throws OrderNotFoundException {
+    public OrderResponseDto updateOrder(Long id, OrderRequestDto orderRequestDto) throws OrderNotFoundException {
         Order order = orderRepository.findById(id)
-                .orElseThrow(()->new OrderNotFoundException("Order with the id of" + id + " not found"));
+                .orElseThrow(() -> new OrderNotFoundException("Order with the id of" + id + " not found"));
         if (!validateOrder(orderRequestDto)) {
             throw new IllegalArgumentException("Invalid order request,Please try again");
         }
@@ -106,7 +112,13 @@ public class OrderService {
         order.setPaymentMethod(orderRequestDto.getPaymentMethod());
         Order save = orderRepository.save(order);
         return modelMapper.map(save, OrderResponseDto.class);
+
     }
+
+
+
+
+
 
 
     private boolean validateOrder(OrderRequestDto orderRequestDto) {

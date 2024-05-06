@@ -23,7 +23,7 @@ public class User {
 
     private String name;
     private String surName;
-    private int age;
+    private int  age;
     private String emailAddress;
     private String gender;
     private String phoneNumber;
