@@ -1,16 +1,12 @@
 package com.example.cabproject.service;
 
 import com.example.cabproject.config.DriverApi;
-import com.example.cabproject.dto.CarDto.CarResponseDto;
+import com.example.cabproject.dto.CarDto.TaxiResponseDto;
 import com.example.cabproject.dto.request.OrderRequestDto;
 import com.example.cabproject.dto.response.OrderResponseDto;
 import com.example.cabproject.entity.Order;
-import com.example.cabproject.entity.User;
 import com.example.cabproject.enums.OrderStatus;
-import com.example.cabproject.enums.PaymentStatus;
-import com.example.cabproject.exceptions.CarNotFoundException;
 import com.example.cabproject.exceptions.OrderNotFoundException;
-import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.repository.OrderRepository;
 import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,35 +29,34 @@ public class OrderService {
     private final UserRepository userRepository;
     private final DriverApi driverApi;
 
-
     OrderRequestDto currentOrderRequestDto;
 
-    public List<CarResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
+    public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
         currentOrderRequestDto = orderRequestDto;
-
-        return driverApi.getAvailableCars();
+        return driverApi.findAvailableCars(orderRequestDto);
     }
 
-    public String createOrderStep2(Long id) throws CarNotFoundException, UserNotFoundException {
-        List<CarResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
-        List<CarResponseDto> list = orderStep1.stream().filter(x -> Objects.equals(x.getCarId(), id)).toList();
-        CarResponseDto carResponseDto;
-        if (list == null) {
-            throw new CarNotFoundException("Car not found");
-        } else {
-            carResponseDto = list.get(0);
-        }
-        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
-        Optional<User> optionalUser = userRepository.findById(currentOrderRequestDto.getUserId());
-        User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User not found"));
-        order.setUser(user);
-        modelMapper.map(carResponseDto, order);
-        order.setPaymentStatus(PaymentStatus.PENDING);
-        order.setStatus(OrderStatus.ACTIVE);
-        orderRepository.save(order);
-        sendOrder(order);
-        return "Successfully";
-    }
+//    public String createOrderStep2(Long id) throws CarNotFoundException, UserNotFoundException {
+//        List<TaxiResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
+//        List<TaxiResponseDto> list = orderStep1.stream().
+//                filter(x->x.getCarResponseDto().getCarId().equals(id)).toList();
+//        TaxiResponseDto taxiResponseDto;
+//        if (list == null) {
+//            throw new CarNotFoundException("Car not found");
+//        } else {
+//            taxiResponseDto = list.get(0);
+//        }
+//        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
+//        Optional<User> optionalUser = userRepository.findById(currentOrderRequestDto.getUserId());
+//        User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User not found"));
+//        order.setUser(user);
+//        modelMapper.map(taxiResponseDto, order);
+//        order.setPaymentStatus(PaymentStatus.PENDING);
+//        order.setStatus(OrderStatus.ACTIVE);
+//        orderRepository.save(order);
+//        sendOrder(order);
+//        return "Successfully";
+//    }
 
     public Order sendOrder(Order order) {
         return order;
@@ -72,7 +66,7 @@ public class OrderService {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
             Order order1 = order.get();
-            if (order1.getStatus() == OrderStatus.PENDING || order1.getStatus() == OrderStatus.ACTIVE) {
+            if (order1.getStatus() == OrderStatus.PENDING || order1.getStatus() == OrderStatus.ACCEPTED) {
                 order1.setStatus(OrderStatus.CANCELLED);
                 orderRepository.save(order1);
                 ResponseEntity.ok("Order with id " + id + " has been successfully cancelled.");
@@ -91,7 +85,7 @@ public class OrderService {
     }
 
     public List<OrderResponseDto> getActiveOrders() {
-        List<Order> activeOrder = orderRepository.findOrdersByStatus(OrderStatus.ACTIVE);
+        List<Order> activeOrder = orderRepository.findOrdersByStatus(OrderStatus.ACCEPTED);
         return activeOrder.stream().map(x -> modelMapper.map(x, OrderResponseDto.class)).toList();
     }
 
@@ -114,12 +108,6 @@ public class OrderService {
         return modelMapper.map(save, OrderResponseDto.class);
 
     }
-
-
-
-
-
-
 
     private boolean validateOrder(OrderRequestDto orderRequestDto) {
         if (orderRequestDto.getCustomerName() == null || orderRequestDto.getCustomerName().isEmpty()) {

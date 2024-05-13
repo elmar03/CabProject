@@ -18,7 +18,6 @@ public class OrderRequestDto {
    private Double destinationLatitude;
    private Double destinationLongitude;
    private PaymentMethod paymentMethod;
-
    private Long userId;
 
 }

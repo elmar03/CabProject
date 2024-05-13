@@ -34,4 +34,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
+    @OneToMany(mappedBy = "feedback")
+    private List<Feedback> reviews;
+
 }

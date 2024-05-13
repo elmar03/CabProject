@@ -28,13 +28,10 @@ public class Order {
     private String model;
     private String colour;
     private Integer number;
-    private  Integer year;
+    private Integer year;
     private String size;
     private Double carLat;
     private Double carLong;
-    
-    private Integer UserReview;
-
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
@@ -48,6 +45,5 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="user_id")
     User user;
-
 
 }

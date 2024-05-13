@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class OrderResponseDto {
+    
     private String orderId;
     private String customerName;
     private Double pickupLatitude;
@@ -21,12 +22,11 @@ public class OrderResponseDto {
     private LocalDateTime dropOffTime;
     private double distance;
     private double fare;
+
     private String driverId;
     private PaymentStatus paymentStatus;
     private OrderStatus orderStatus;
     private PaymentMethod paymentMethod;
-
     private CarResponseDto carResponseDto;
-
 
 }

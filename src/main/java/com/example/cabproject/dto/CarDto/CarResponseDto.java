@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CarResponseDto {
-
     private Long carId;
     private String brand;
     private String model;
@@ -17,5 +16,6 @@ public class CarResponseDto {
     private Double carLat;
     private Double carLong;
 
+    private DriverResponseDto driverResponseDto;
 
 }

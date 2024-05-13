@@ -1,6 +1,8 @@
 package com.example.cabproject.config;
 
 import com.example.cabproject.dto.CarDto.CarResponseDto;
+import com.example.cabproject.dto.CarDto.TaxiResponseDto;
+import com.example.cabproject.dto.request.OrderRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +12,10 @@ import java.util.List;
 @FeignClient(name = "DriverApi",url = "localhost:8081")
 public interface DriverApi{
 
-    @GetMapping("/car/get-all")
-    List<CarResponseDto> getAvailableCars();
+//    @PostMapping("/distance/orderReview")
+//    List<TaxiResponseDto> getAvailableCars(OrderRequestDto orderRequestDto);
+    @GetMapping("/distance/orderReview")
+    List<TaxiResponseDto> findAvailableCars(OrderRequestDto orderRequestDto);
 
     @GetMapping("/byID")
     CarResponseDto findByID(long id);

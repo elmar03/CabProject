@@ -2,7 +2,7 @@ package com.example.cabproject.enums;
 
 public enum OrderStatus {
     PENDING,
-    ACTIVE,
+    ACCEPTED,
     COMPLETED,
     CANCELLED
 }
