@@ -11,5 +11,5 @@ public class TaxiResponseDto {
 
     //private List<DriverResponseDto> driverResponseDto;
     private List<CarResponseDto> carResponseDto;
-    private Integer price;
+   // private Integer price;
 }

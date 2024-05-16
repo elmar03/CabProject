@@ -1,5 +1,6 @@
 package com.example.cabproject.entity;
 
+import com.example.cabproject.dto.CarDto.DriverResponseDto;
 import com.example.cabproject.enums.Options;
 import com.example.cabproject.enums.OrderStatus;
 import com.example.cabproject.enums.PaymentMethod;
@@ -28,10 +29,20 @@ public class Order {
     private String model;
     private String colour;
     private Integer number;
-    private Integer year;
+    private  Integer year;
     private String size;
     private Double carLat;
     private Double carLong;
+
+
+    private Integer price;
+
+    private Long driverId;
+    private  String driverName;
+    private  String driverSurname;
+    private String driverLanguage;
+
+
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

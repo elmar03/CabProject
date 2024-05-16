@@ -16,6 +16,9 @@ public class CarResponseDto {
     private Double carLat;
     private Double carLong;
 
+
+    private Integer price;
+
     private DriverResponseDto driverResponseDto;
 
 }

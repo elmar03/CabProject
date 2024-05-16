@@ -5,7 +5,9 @@ import com.example.cabproject.dto.CarDto.TaxiResponseDto;
 import com.example.cabproject.dto.request.OrderRequestDto;
 import com.example.cabproject.dto.response.OrderResponseDto;
 import com.example.cabproject.entity.Order;
+import com.example.cabproject.entity.User;
 import com.example.cabproject.enums.OrderStatus;
+import com.example.cabproject.enums.PaymentStatus;
 import com.example.cabproject.exceptions.OrderNotFoundException;
 import com.example.cabproject.repository.OrderRepository;
 import com.example.cabproject.repository.UserRepository;
@@ -36,27 +38,25 @@ public class OrderService {
         return driverApi.findAvailableCars(orderRequestDto);
     }
 
-//    public String createOrderStep2(Long id) throws CarNotFoundException, UserNotFoundException {
-//        List<TaxiResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
-//        List<TaxiResponseDto> list = orderStep1.stream().
-//                filter(x->x.getCarResponseDto().getCarId().equals(id)).toList();
-//        TaxiResponseDto taxiResponseDto;
-//        if (list == null) {
-//            throw new CarNotFoundException("Car not found");
-//        } else {
-//            taxiResponseDto = list.get(0);
-//        }
-//        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
-//        Optional<User> optionalUser = userRepository.findById(currentOrderRequestDto.getUserId());
-//        User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User not found"));
-//        order.setUser(user);
-//        modelMapper.map(taxiResponseDto, order);
-//        order.setPaymentStatus(PaymentStatus.PENDING);
-//        order.setStatus(OrderStatus.ACTIVE);
-//        orderRepository.save(order);
-//        sendOrder(order);
-//        return "Successfully";
-//    }
+    public String createOrderStep2(Long id){
+        List<TaxiResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
+        List<TaxiResponseDto> list = orderStep1.stream().
+                filter(x->x.getCarResponseDto().stream().anyMatch(car->car.getCarId().equals(id))).toList();
+        if (!list.isEmpty()) {
+        TaxiResponseDto taxiResponseDto = list.get(0);
+        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
+        User user = userRepository.findById(currentOrderRequestDto.getUserId()).orElseThrow();
+        order.setUser(user);
+        modelMapper.map(taxiResponseDto.getCarResponseDto().get(0), order);
+        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setStatus(OrderStatus.ACCEPTED);
+        orderRepository.save(order);
+        sendOrder(order);
+        return "Order created";
+        } else {
+            return "No matching taxi found for the provided ID";
+        }
+    }
 
     public Order sendOrder(Order order) {
         return order;

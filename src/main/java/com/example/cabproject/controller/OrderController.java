@@ -26,10 +26,10 @@ public class OrderController {
         return orderService.createOrderStep1(orderRequestDto);
     }
 
-//    @PostMapping("/createOrder")
-//    public String createOrder(@RequestParam Long id) throws CarNotFoundException, UserNotFoundException {
-//      return orderService.createOrderStep2( id);
-//    }
+    @PostMapping("/createOrder")
+    public String createOrder(@RequestParam Long id){
+      return orderService.createOrderStep2(id);
+    }
     @GetMapping("/completedOrders")
     public List<OrderResponseDto> getCompletedOrders(){
         return orderService.getCompletedOrders();
