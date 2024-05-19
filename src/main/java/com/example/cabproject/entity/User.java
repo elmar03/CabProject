@@ -12,8 +12,6 @@ import java.util.List;
 @Entity
 @Data
 @RequiredArgsConstructor
-@Getter
-@Setter
 @Table(name ="\"user\"")
 public class User {
     @Id
@@ -34,7 +32,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "feedback")
+    @OneToMany(mappedBy = "user")
     private List<Feedback> reviews;
 
 }

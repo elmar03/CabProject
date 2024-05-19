@@ -12,4 +12,6 @@ public class FeedbackResponseDto {
     private String feedback;
     private Date submissionDate;
     private Integer starNumber;
+    private Long userId;
+    private Long orderID;
 }

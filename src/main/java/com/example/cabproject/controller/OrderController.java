@@ -58,8 +58,8 @@ public class OrderController {
     }
 
     @PostMapping("/sendOrder")
-    public Order sendOrder(Order order){
-        return orderService.sendOrder(order);
+    public OrderResponseDto sendOrder(){
+        return orderService.sendOrder();
     }
 
 

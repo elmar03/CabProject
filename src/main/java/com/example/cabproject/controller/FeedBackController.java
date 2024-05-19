@@ -18,7 +18,7 @@ public class FeedBackController {
     private final FeedbackService feedbackService;
 
     @PostMapping("/saveFeedback")
-    public ResponseEntity<String> saveFeedback(FeedbackRequestDto feedbackRequestDto) throws UserNotFoundException {
+    public ResponseEntity<String> saveFeedback(FeedbackRequestDto feedbackRequestDto) {
         feedbackService.saveFeedback(feedbackRequestDto);
         return ResponseEntity.ok("Thank you for your feedback");
     }

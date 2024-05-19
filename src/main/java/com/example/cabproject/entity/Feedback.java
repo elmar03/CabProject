@@ -25,6 +25,10 @@ public class Feedback {
     @JoinColumn(name="user_id")
     User user;
 
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
 
 
 

@@ -35,6 +35,7 @@ public class Order {
     private Double carLong;
 
 
+
     private Integer price;
 
     private Long driverId;
@@ -42,6 +43,7 @@ public class Order {
     private  String driverSurname;
     private String driverLanguage;
 
+    private Integer user_review;
 
 
     @Enumerated(EnumType.STRING)
@@ -56,5 +58,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="user_id")
     User user;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Feedback feedback;
 
 }

@@ -30,13 +30,12 @@ public class FeedbackService {
     private final UserRepository userRepository;
 
 
-    public void saveFeedback(FeedbackRequestDto feedbackRequestDto) throws UserNotFoundException {
+    public void saveFeedback(FeedbackRequestDto feedbackRequestDto){
 
         Order order = orderRepository.findById(feedbackRequestDto.getOrderID()).orElseThrow();
         if(order.getStatus()== OrderStatus.COMPLETED){
             Feedback feedbackEntity = modelMapper.map(feedbackRequestDto, Feedback.class);
-            Optional<User> optionalUser = userRepository.findById(feedbackRequestDto.getUserId());
-            User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User not found"));
+            User user = userRepository.findById(feedbackRequestDto.getUserId()).orElseThrow();
             feedbackEntity.setUser(user);
             feedbackRepo.save(feedbackEntity);
             ResponseEntity.ok("Thank you for your feedback");

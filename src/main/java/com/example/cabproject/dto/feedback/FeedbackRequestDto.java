@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class FeedbackRequestDto {
+public class FeedbackRequestDto{
     private String feedback;
     private Date submissionDate;
     private Integer starNumber;

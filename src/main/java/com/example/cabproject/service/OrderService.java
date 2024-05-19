@@ -1,6 +1,7 @@
 package com.example.cabproject.service;
 
 import com.example.cabproject.config.DriverApi;
+import com.example.cabproject.dto.CarDto.CarResponseDto;
 import com.example.cabproject.dto.CarDto.TaxiResponseDto;
 import com.example.cabproject.dto.request.OrderRequestDto;
 import com.example.cabproject.dto.response.OrderResponseDto;
@@ -14,11 +15,16 @@ import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -51,15 +57,24 @@ public class OrderService {
         order.setPaymentStatus(PaymentStatus.PENDING);
         order.setStatus(OrderStatus.ACCEPTED);
         orderRepository.save(order);
-        sendOrder(order);
+       //  sendOrder();
         return "Order created";
         } else {
             return "No matching taxi found for the provided ID";
         }
     }
 
-    public Order sendOrder(Order order) {
-        return order;
+    public OrderResponseDto sendOrder() {
+        PageRequest pageRequest = PageRequest.of(0, 1);
+        Page<Order> orders = orderRepository.findLatestOrders(pageRequest);
+        if (orders.hasContent()) {
+            Order latestOrder = orders.getContent().get(0);
+
+            return modelMapper.map(latestOrder, OrderResponseDto.class);
+
+        } else {
+            throw new NoSuchElementException("No orders found");
+        }
     }
 
     public void cancelOrder(Long id) {
