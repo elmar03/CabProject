@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -36,42 +35,46 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final DriverApi driverApi;
-
     OrderRequestDto currentOrderRequestDto;
+    private List<TaxiResponseDto> availableCars;
+
 
     public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
         currentOrderRequestDto = orderRequestDto;
-        return driverApi.findAvailableCars(orderRequestDto);
+        availableCars = driverApi.findAvailableCars(orderRequestDto);
+        return availableCars;
     }
-
-    public String createOrderStep2(Long id){
-        List<TaxiResponseDto> orderStep1 = createOrderStep1(currentOrderRequestDto);
-        List<TaxiResponseDto> list = orderStep1.stream().
-                filter(x->x.getCarResponseDto().stream().anyMatch(car->car.getCarId().equals(id))).toList();
+    public String createOrderStep2(Long id) {
+        List<TaxiResponseDto> list = availableCars.stream()
+                .filter(x -> x.getCarResponseDto().stream().anyMatch(car -> car.getCarId().equals(id)))
+                .toList();
         if (!list.isEmpty()) {
-        TaxiResponseDto taxiResponseDto = list.get(0);
-        Order order = modelMapper.map(currentOrderRequestDto, Order.class);
-        User user = userRepository.findById(currentOrderRequestDto.getUserId()).orElseThrow();
-        order.setUser(user);
-        modelMapper.map(taxiResponseDto.getCarResponseDto().get(0), order);
-        order.setPaymentStatus(PaymentStatus.PENDING);
-        order.setStatus(OrderStatus.ACCEPTED);
-        orderRepository.save(order);
-       //  sendOrder();
-        return "Order created";
+            CarResponseDto chosenCar = list.stream()
+                    .flatMap(taxi -> taxi.getCarResponseDto().stream())
+                    .filter(car -> car.getCarId().equals(id))
+                    .findFirst()
+                    .orElseThrow();
+            Order order = modelMapper.map(currentOrderRequestDto, Order.class);
+            User user = userRepository.findById(currentOrderRequestDto.getUserId()).orElseThrow();
+            order.setUser(user);
+            modelMapper.map(chosenCar, order);
+            order.setPaymentStatus(PaymentStatus.PENDING);
+            order.setStatus(OrderStatus.ACCEPTED);
+            orderRepository.save(order);
+            sendOrder();
+            return "Order created";
         } else {
             return "No matching taxi found for the provided ID";
         }
     }
+
 
     public OrderResponseDto sendOrder() {
         PageRequest pageRequest = PageRequest.of(0, 1);
         Page<Order> orders = orderRepository.findLatestOrders(pageRequest);
         if (orders.hasContent()) {
             Order latestOrder = orders.getContent().get(0);
-
             return modelMapper.map(latestOrder, OrderResponseDto.class);
-
         } else {
             throw new NoSuchElementException("No orders found");
         }
