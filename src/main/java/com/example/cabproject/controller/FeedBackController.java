@@ -1,5 +1,6 @@
 package com.example.cabproject.controller;
 
+import com.example.cabproject.config.DriverApi;
 import com.example.cabproject.dto.feedback.FeedbackRequestDto;
 import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.service.FeedbackService;
@@ -7,6 +8,7 @@ import com.example.cabproject.service.OrderService;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,11 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedBackController {
 
     private final FeedbackService feedbackService;
+    private final DriverApi driverApi;
 
     @PostMapping("/saveFeedback")
-    public ResponseEntity<String> saveFeedback(FeedbackRequestDto feedbackRequestDto) {
+    public ResponseEntity<String> saveFeedback(@RequestBody FeedbackRequestDto feedbackRequestDto) {
         feedbackService.saveFeedback(feedbackRequestDto);
         return ResponseEntity.ok("Thank you for your feedback");
     }
+
+
+
+
+
 
 }

@@ -31,18 +31,16 @@ public class FeedbackService {
 
 
     public void saveFeedback(FeedbackRequestDto feedbackRequestDto){
-
-        Order order = orderRepository.findById(feedbackRequestDto.getOrderID()).orElseThrow();
-        if(order.getStatus()== OrderStatus.COMPLETED){
-            Feedback feedbackEntity = modelMapper.map(feedbackRequestDto, Feedback.class);
-            User user = userRepository.findById(feedbackRequestDto.getUserId()).orElseThrow();
-            feedbackEntity.setUser(user);
-            feedbackRepo.save(feedbackEntity);
-            ResponseEntity.ok("Thank you for your feedback");
-        } else {
-            ResponseEntity.ok("You can't send feedback, for Active order.");
-
-        }
+        Order order = orderRepository.findById(feedbackRequestDto.getOrder_id()).orElseThrow();
+        order.setUser_review(feedbackRequestDto.getStarNumber());
+        User user = userRepository.findById(feedbackRequestDto.getUser_id()).orElseThrow();
+        Feedback feedbackEntity = modelMapper.map(feedbackRequestDto, Feedback.class);
+        feedbackEntity.setUser(user);
+        feedbackEntity.setOrder(order);
+        feedbackRepo.save(feedbackEntity);
+        ResponseEntity.ok("Thank you for your feedback");
     }
+
+
 
 }
