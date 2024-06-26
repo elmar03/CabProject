@@ -2,6 +2,7 @@ package com.example.cabproject.service;
 
 import com.example.cabproject.config.DriverApi;
 import com.example.cabproject.dto.feedback.FeedbackRequestDto;
+import com.example.cabproject.dto.feedback.FeedbackResponseDto;
 import com.example.cabproject.entity.Feedback;
 import com.example.cabproject.entity.Order;
 import com.example.cabproject.entity.User;
@@ -13,10 +14,14 @@ import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +46,20 @@ public class FeedbackService {
         ResponseEntity.ok("Thank you for your feedback");
     }
 
+    public List<Feedback> findFeedbacksByOrderId(Long orderId) {
+      return  feedbackRepo.findFeedbacksByOrderId(orderId);
+
+//        return feedbackList.stream()
+//                .map(FeedbackResponseDto::new)
+//                .collect(Collectors.toList());
+    }
+
+//    public List<FeedbackResponseDto> findFeedbacksByOrderId2(Long orderId) {
+//        List<Feedback> feedbackList = feedbackRepo.findByOrderOrderIdOrderByFeedbackIdDesc(orderId);
+//        return feedbackList.stream()
+//                .map(FeedbackResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
 
 
 }

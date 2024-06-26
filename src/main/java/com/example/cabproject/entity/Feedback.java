@@ -1,5 +1,6 @@
 package com.example.cabproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,10 +22,12 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonBackReference
     User user;
 
     @OneToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Order order;
 
 

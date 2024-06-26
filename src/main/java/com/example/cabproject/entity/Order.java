@@ -5,6 +5,8 @@ import com.example.cabproject.enums.Options;
 import com.example.cabproject.enums.OrderStatus;
 import com.example.cabproject.enums.PaymentMethod;
 import com.example.cabproject.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -57,9 +59,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonBackReference
     User user;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Feedback feedback;
 
 }
