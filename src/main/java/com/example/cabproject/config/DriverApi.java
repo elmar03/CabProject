@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 @Component
 @FeignClient(name = "DriverApi",url = "localhost:8081")
-public interface DriverApi{
+public interface DriverApi {
 
-//    @PostMapping("/distance/orderReview")
-//    List<TaxiResponseDto> getAvailableCars(OrderRequestDto orderRequestDto);
     @GetMapping("/distance/orderReview")
     List<TaxiResponseDto> findAvailableCars(OrderRequestDto orderRequestDto);
 
@@ -25,11 +23,6 @@ public interface DriverApi{
 
     @GetMapping("/distance/nearest-cars")
     List<CarResponseDto> findNearestCars();
-
-
-//    @PostMapping("/feedBack/saveFeedback")
-//    FeedbackResponseDto saveFeedback();
-
 
 
 }

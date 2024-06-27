@@ -28,14 +28,10 @@ public class FeedBackController {
     }
 
     @GetMapping("/feedbackByOrderId")
-    public List<Feedback> feedbackByOrderId(@RequestParam ("orderId") long orderId){
+    public List<Feedback> feedbackByOrderId(@RequestParam long orderId){
       return feedbackService.findFeedbacksByOrderId(orderId);
     }
 
-//    @PostMapping("/feedbackByOrderId2")
-//    public List<FeedbackResponseDto> feedbackByOrderId2(@RequestParam ("orderId") long orderId){
-//        return feedbackService.findFeedbacksByOrderId(orderId);
-//    }
 
 
 }

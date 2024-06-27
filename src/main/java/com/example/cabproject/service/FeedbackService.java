@@ -49,17 +49,5 @@ public class FeedbackService {
     public List<Feedback> findFeedbacksByOrderId(Long orderId) {
       return  feedbackRepo.findFeedbacksByOrderId(orderId);
 
-//        return feedbackList.stream()
-//                .map(FeedbackResponseDto::new)
-//                .collect(Collectors.toList());
     }
-
-//    public List<FeedbackResponseDto> findFeedbacksByOrderId2(Long orderId) {
-//        List<Feedback> feedbackList = feedbackRepo.findByOrderOrderIdOrderByFeedbackIdDesc(orderId);
-//        return feedbackList.stream()
-//                .map(FeedbackResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
-
 }
