@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,8 +47,9 @@ public class FeedbackService {
         ResponseEntity.ok("Thank you for your feedback");
     }
 
-    public List<Feedback> findFeedbacksByOrderId(Long orderId) {
-      return  feedbackRepo.findFeedbacksByOrderId(orderId);
+    public List<FeedbackResponseDto> findFeedbacksByOrderId(Long orderId) {
+        List<Feedback> feedbacksByOrderId = feedbackRepo.findFeedbacksByOrderId(orderId);
 
+        return Collections.singletonList(modelMapper.map(feedbacksByOrderId, FeedbackResponseDto.class));
     }
 }

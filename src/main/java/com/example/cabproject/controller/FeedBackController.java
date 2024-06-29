@@ -3,10 +3,7 @@ package com.example.cabproject.controller;
 import com.example.cabproject.config.DriverApi;
 import com.example.cabproject.dto.feedback.FeedbackRequestDto;
 import com.example.cabproject.dto.feedback.FeedbackResponseDto;
-import com.example.cabproject.entity.Feedback;
-import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.service.FeedbackService;
-import com.example.cabproject.service.OrderService;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +25,7 @@ public class FeedBackController {
     }
 
     @GetMapping("/feedbackByOrderId")
-    public List<Feedback> feedbackByOrderId(@RequestParam long orderId){
+    public List<FeedbackResponseDto> feedbackByOrderId(@RequestParam long orderId){
       return feedbackService.findFeedbacksByOrderId(orderId);
     }
 
