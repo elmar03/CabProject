@@ -30,7 +30,4 @@ public class Feedback {
     @JsonBackReference
     private Order order;
 
-
-
-
 }

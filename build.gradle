@@ -34,6 +34,22 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version:'4.1.0'
 
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
+
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+//    implementation 'org.springframework.security:spring-security-core:5.7.1'
+//    implementation 'org.springframework.security:spring-security-web:5.7.1'
+//    implementation 'org.springframework.security:spring-security-config:5.7.1'
+//    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+
+
 
 }
 

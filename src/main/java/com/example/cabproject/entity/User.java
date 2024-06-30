@@ -21,6 +21,7 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
+
     private String name;
     private String surName;
     private int  age;
