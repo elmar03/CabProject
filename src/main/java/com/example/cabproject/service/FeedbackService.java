@@ -49,7 +49,8 @@ public class FeedbackService {
 
     public List<FeedbackResponseDto> findFeedbacksByOrderId(Long orderId) {
         List<Feedback> feedbacksByOrderId = feedbackRepo.findFeedbacksByOrderId(orderId);
-
-        return Collections.singletonList(modelMapper.map(feedbacksByOrderId, FeedbackResponseDto.class));
+        return feedbacksByOrderId.stream()
+                .map(feedback -> modelMapper.map(feedback, FeedbackResponseDto.class))
+                .collect(Collectors.toList());
     }
 }
