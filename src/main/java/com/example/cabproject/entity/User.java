@@ -3,24 +3,26 @@ package com.example.cabproject.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchConnectionDetails;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Entity
 @Data
-@RequiredArgsConstructor
 @Table(name ="\"user\"")
+@Builder
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private Long userId;
-
+    private String username;
+    private String password;
+    private String role;
 
     private String name;
     private String surName;
@@ -39,4 +41,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Feedback> reviews;
 
+
+    public User() {
+
+    }
 }

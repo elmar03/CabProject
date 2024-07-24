@@ -9,6 +9,8 @@ import lombok.*;
 public class UserResponseDto {
     private String name;
     private String surName;
+    private String username;
+    private String role;
     private int age;
     private String emailAddress;
     private String gender;

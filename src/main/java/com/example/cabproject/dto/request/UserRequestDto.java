@@ -11,6 +11,9 @@ import lombok.Setter;
 public class UserRequestDto {
     private String name;
     private String surName;
+    private String username;
+    private String password;
+    private String role;
     private int age;
     private String emailAddress;
     private String gender;

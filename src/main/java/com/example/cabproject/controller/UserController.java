@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/findUserByİd{id}")
+    @GetMapping("/findUserById/{id}")
     public UserResponseDto findUser(@PathVariable long id){
         return userService.findUserById(id);
     }
@@ -32,11 +32,11 @@ public class UserController {
         return ResponseEntity.ok("Account deleted");
     }
 
-    @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@RequestBody UserRequestDto userRequestDto){
-        userService.userRegistration(userRequestDto);
-        return ResponseEntity.ok("Registration successful");
-    }
+//    @PostMapping("/signUp")
+//    public ResponseEntity<String> signUp(@RequestBody UserRequestDto userRequestDto){
+//        userService.userRegistration(userRequestDto);
+//        return ResponseEntity.ok("Registration successful");
+//    }
 
 
 

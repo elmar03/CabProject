@@ -7,7 +7,11 @@ import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final OrderService orderService;
+
 
     public void userRegistration(UserRequestDto requestDto){
         User newUser = modelMapper.map(requestDto, User.class);
@@ -26,8 +30,9 @@ public class UserService {
         ResponseEntity.ok("Registration successful");
     }
 
+
     public UserResponseDto findUserById(Long userId){
-        User userById = userRepository.findByUserId(userId);
+        User userById = userRepository.findUserByUserId(userId);
         return modelMapper.map(userById, UserResponseDto.class);
     }
 
@@ -49,8 +54,7 @@ public class UserService {
     }
 
 
-
-
-
-
+    public User findByEmail(String email) {
+     return userRepository.findUserByEmailAddress(email);
+    }
 }
