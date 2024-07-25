@@ -4,6 +4,7 @@ import com.example.cabproject.dto.request.UserRequestDto;
 import com.example.cabproject.entity.User;
 import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
+
 
 @RestController
+@Slf4j
 @CrossOrigin
 @RequiredArgsConstructor
+//@SecurityRequBearerirement(name = " Authentication")
 public class JwtAuthenticationController {
 
 	@Autowired
@@ -48,7 +51,7 @@ public class JwtAuthenticationController {
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		AfterSignInResponseDto signInResponseDto = AfterSignInResponseDto.builder()
 				.token(token)
-				.email(request.getEmail())
+				.emailAddress(request.getEmail())
 				.password(request.getPassword())
 				.role(request.getRole())
 				.build();
@@ -65,6 +68,15 @@ public class JwtAuthenticationController {
 					.emailAddress(dto.getEmailAddress())
 					.password(passwordEncoder.encode(dto.getPassword()))
 					.role(dto.getRole())
+					.username(dto.getUsername())
+					.name(dto.getName())
+					.surName(dto.getSurName())
+					.age(dto.getAge())
+					.gender(dto.getGender())
+					.phoneNumber(dto.getPhoneNumber())
+					.homeAddress(dto.getHomeAddress())
+					.cardDetails(dto.getCardDetails())
+					.language(dto.getLanguage())
 					.build();
 			userRepo.save(userEntity);
 			return ResponseEntity.ok("You signed!");
@@ -76,14 +88,20 @@ public class JwtAuthenticationController {
 
 
 	private void authenticate(String username, String password) throws Exception {
-		Objects.requireNonNull(username);
-		Objects.requireNonNull(password);
+		log.debug("Authenticating user: {}", username);
+
+		if (username == null || password == null) {
+			log.error("Authentication attempt with null username or password");
+			throw new IllegalArgumentException("Username and password must not be null");
+		}
 
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
+			log.error("User disabled: {}", username, e);
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
+			log.error("Invalid credentials for user: {}", username, e);
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}

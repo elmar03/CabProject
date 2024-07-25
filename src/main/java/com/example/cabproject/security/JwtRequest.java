@@ -14,12 +14,7 @@ public class JwtRequest implements Serializable {
 
 	private String role;
 
-	
-	//need default constructor for JSON Parsing
-	public JwtRequest()
-	{
-		
-	}
+
 
 	public JwtRequest(String emailAddress, String password) {
 		this.setEmail(emailAddress);
