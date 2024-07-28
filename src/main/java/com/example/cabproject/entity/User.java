@@ -15,6 +15,9 @@ import java.util.Optional;
 @Table(name ="\"user\"")
 @Builder
 @AllArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,7 +45,5 @@ public class User {
     private List<Feedback> reviews;
 
 
-    public User() {
 
-    }
 }
