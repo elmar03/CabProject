@@ -1,5 +1,6 @@
 package com.example.cabproject.security.model;
 
+import com.example.cabproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +14,11 @@ import java.util.Optional;
 public class MyUserDetailService implements UserDetailsService {
 
     @Autowired
-    private MyUserRepository repository;
+    private UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<MyUser> user = repository.findByUsername(username);
+        Optional<com.example.cabproject.entity.User> user = Optional.ofNullable(repository.findByUsername(username));
         if (user.isPresent()) {
             var userObj = user.get();
             return User.builder()
@@ -30,7 +31,7 @@ public class MyUserDetailService implements UserDetailsService {
         }
     }
 
-    private String[] getRoles(MyUser user) {
+    private String[] getRoles(com.example.cabproject.entity.User user) {
         if (user.getRole() == null) {
             return new String[]{"USER"};
         }
