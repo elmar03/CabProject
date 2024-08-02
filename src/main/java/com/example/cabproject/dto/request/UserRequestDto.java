@@ -21,4 +21,23 @@ public class UserRequestDto {
     private String homeAddress;
     private String cardDetails;
     private String language;
+
+    public UserRequestDto(String name, String surName, String username, String password, String role, int age, String emailAddress, String gender, String phoneNumber, String homeAddress, String cardDetails, String language) {
+        this.name = name;
+        this.surName = surName;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.age = age;
+        this.emailAddress = emailAddress;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.homeAddress = homeAddress;
+        this.cardDetails = cardDetails;
+        this.language = language;
+    }
+
+
+    public UserRequestDto(String username, String mail, String password, String john, String doe, int age, String emailAddress) {
+    }
 }

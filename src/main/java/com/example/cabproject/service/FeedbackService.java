@@ -6,22 +6,16 @@ import com.example.cabproject.dto.feedback.FeedbackResponseDto;
 import com.example.cabproject.entity.Feedback;
 import com.example.cabproject.entity.Order;
 import com.example.cabproject.entity.User;
-import com.example.cabproject.enums.OrderStatus;
-import com.example.cabproject.exceptions.UserNotFoundException;
 import com.example.cabproject.repository.FeedbackRepo;
 import com.example.cabproject.repository.OrderRepository;
 import com.example.cabproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +30,7 @@ public class FeedbackService {
     private final UserRepository userRepository;
 
 
-    public void saveFeedback(FeedbackRequestDto feedbackRequestDto){
+    public ResponseEntity<String> saveFeedback(FeedbackRequestDto feedbackRequestDto){
         Order order = orderRepository.findById(feedbackRequestDto.getOrder_id()).orElseThrow();
         order.setUser_review(feedbackRequestDto.getStarNumber());
         User user = userRepository.findById(feedbackRequestDto.getUser_id()).orElseThrow();
@@ -45,6 +39,7 @@ public class FeedbackService {
         feedbackEntity.setOrder(order);
         feedbackRepo.save(feedbackEntity);
         ResponseEntity.ok("Thank you for your feedback");
+        return null;
     }
 
     public List<FeedbackResponseDto> findFeedbacksByOrderId(Long orderId) {

@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -94,7 +93,7 @@ public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
         }
     }
 
-    public void cancelOrder(Long id) {
+    public ResponseEntity<String> cancelOrder(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
             Order order1 = order.get();
@@ -109,6 +108,7 @@ public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
         } else {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order with the id of " + id + " not found");
         }
+        return null;
     }
 
     public List<OrderResponseDto> getCompletedOrders() {

@@ -3,5 +3,5 @@ package com.example.cabproject.enums;
 public enum Options {
     BASIC,
     XL,
-    DELIVERY
+    OPTION1, DELIVERY
 }
