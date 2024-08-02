@@ -39,11 +39,25 @@ public class OrderService {
     private List<TaxiResponseDto> availableCars;
 
 
-    public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
-        currentOrderRequestDto = orderRequestDto;
+//    public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
+//        currentOrderRequestDto = orderRequestDto;
+//        availableCars = driverApi.findAvailableCars(orderRequestDto);
+//        return availableCars;
+//    }
+public List<TaxiResponseDto> createOrderStep1(OrderRequestDto orderRequestDto) {
+    log.debug("Received order request: {}", orderRequestDto);
+    currentOrderRequestDto = orderRequestDto;
+    try {
+        log.debug("Calling driverApi.findAvailableCars");
         availableCars = driverApi.findAvailableCars(orderRequestDto);
+        log.debug("Received available cars: {}", availableCars);
         return availableCars;
+    } catch (Exception e) {
+        log.error("Error calling driverApi.findAvailableCars", e);
+        throw e;
     }
+}
+
     public String createOrderStep2(Long id) {
         List<TaxiResponseDto> list = availableCars.stream()
                 .filter(x -> x.getCarResponseDto().stream().anyMatch(car -> car.getCarId().equals(id)))
